@@ -1,0 +1,24 @@
+stock:
+  token: pF35gakJH3T9WgcIoe5i8s98AxrCIgQECTwXR0NP
+  url:
+    quote: https://api.stockdata.org/v1/data/quote?symbols=%s&api_token=%s
+    historical-quote: https://api.stockdata.org/v1/data/eod/multiple?symbols=%s&date=%s&api_token=%s
+server:
+  port: 8010
+
+auth:
+  audience: stock-service
+
+spring:
+  application:
+    name: stock-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-t8qcmmc1.us.auth0.com/
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka

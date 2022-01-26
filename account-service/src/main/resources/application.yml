@@ -1,0 +1,21 @@
+spring:
+  thymeleaf:
+    prefix: classpath:/views/
+  datasource:
+    url: jdbc:postgresql://localhost:5433/account
+    username: account
+    password: account
+  jpa:
+    show-sql: true
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
+
+security:
+  jwt:
+    expiration: 600
+    secret: c2VjcmV0
+
+service:
+  currency:
+    all-exchange: http://localhost:8090/all-exchange
+    convert: http://localhost:8090/convert

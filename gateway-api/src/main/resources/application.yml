@@ -1,0 +1,46 @@
+server:
+  port: 8888
+
+service:
+  currency:
+    uri: lb://CURRENCY-SERVICE
+    path:
+      all-exchange: /all-exchange
+      convert: /convert
+    audience: currency-service
+  stock:
+    uri: lb://STOCK-SERVICE
+    path:
+      stock-quotes: /get-stock-quotes
+    audience: stock-service
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          auth0:
+            provider: auth0
+            client-id: oknPyqcrHKiRrsNGMEKKIj1LYhXCGnhx
+            client-secret: F5i1Af4plg-88Q3noiUqG2lJT97ViiPPZd_1twQxd5PR9TJDhk8GuuNptYhutitb
+            scope: openid, profile, email
+        provider:
+          auth0:
+            issuer-uri: https://dev-t8qcmmc1.us.auth0.com/
+  application:
+    name: gateway-api
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka
+
+logging:
+  level:
+    reactor.netty.http.client: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

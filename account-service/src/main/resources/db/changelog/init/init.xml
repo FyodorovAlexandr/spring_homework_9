@@ -1,0 +1,130 @@
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <changeSet id="init-ad-schema" author="iteco">
+        <sql>
+            create schema if not exists ad;
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-ad-address-id-seq" author="iteco">
+        <createSequence sequenceName="address_id_seq" schemaName="ad"/>
+    </changeSet>
+
+    <changeSet id="create-ad-address-table" author="iteco">
+        <createTable tableName="address" schemaName="ad">
+            <column name="id" type="integer">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="country" type="varchar"/>
+            <column name="city" type="varchar"/>
+            <column name="street" type="varchar"/>
+            <column name="home" type="varchar"/>
+        </createTable>
+        <addDefaultValue schemaName="ad" tableName="address" columnName="id" defaultValueSequenceNext="address_id_seq"/>
+    </changeSet>
+
+    <changeSet id="create-ad-users-id-seq" author="iteco">
+        <createSequence sequenceName="users_id_seq" schemaName="ad"/>
+    </changeSet>
+
+    <changeSet id="create-ad-users-table" author="iteco">
+        <createTable tableName="users" schemaName="ad">
+            <column name="id" type="integer">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar"/>
+            <column name="address" type="integer">
+                <constraints foreignKeyName="users_address_fkey" references="ad.address(id)"/>
+            </column>
+        </createTable>
+        <addDefaultValue schemaName="ad" tableName="users" columnName="id" defaultValueSequenceNext="users_id_seq"/>
+    </changeSet>
+
+    <changeSet id="init-dict-schema" author="iteco">
+        <sql>
+            create schema if not exists dict;
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-dict-currency-id-seq" author="iteco">
+        <createSequence sequenceName="currency_id_seq" schemaName="dict"/>
+    </changeSet>
+
+    <changeSet id="create-dict-currency-table" author="iteco">
+        <createTable tableName="currency" schemaName="dict">
+            <column name="id" type="integer">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addDefaultValue schemaName="dict" tableName="currency" columnName="id" defaultValueSequenceNext="currency_id_seq"/>
+    </changeSet>
+
+    <changeSet id="init-bank-schema" author="iteco">
+        <sql>
+            create schema if not exists bank;
+        </sql>
+    </changeSet>
+
+    <changeSet id="create-bank-bank-book-id-seq" author="iteco">
+        <createSequence sequenceName="bank_book_id_seq" schemaName="bank"/>
+    </changeSet>
+
+    <changeSet id="create-bank-bank-book-table" author="iteco">
+        <createTable tableName="bank_book" schemaName="bank">
+            <column name="id" type="integer">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="user_id" type="integer">
+                <constraints nullable="false" foreignKeyName="bank_book_users_fkey" references="ad.users(id)"/>
+            </column>
+            <column name="number" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="amount" type="numeric">
+                <constraints nullable="false"/>
+            </column>
+            <column name="currency" type="integer">
+                <constraints nullable="false" foreignKeyName="bank_book_currency_fkey" references="dict.currency(id)"/>
+            </column>
+        </createTable>
+        <addDefaultValue schemaName="bank" tableName="bank_book" columnName="id" defaultValueSequenceNext="bank_book_id_seq"/>
+    </changeSet>
+
+    <changeSet id="create-ad-group-id-seq" author="iteco">
+        <createSequence sequenceName="group_id_seq" schemaName="ad"/>
+    </changeSet>
+
+    <changeSet id="create-ad-group-table" author="iteco">
+        <createTable tableName="group" schemaName="ad">
+            <column name="id" type="integer" defaultValueComputed="nextval('ad.group_id_seq')">
+                <constraints primaryKey="true" nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="create-ad-users-groups" author="iteco">
+        <createTable tableName="users_groups" schemaName="ad">
+            <column name="user_id" type="integer">
+                <constraints nullable="false" foreignKeyName="users_groups_user_fkey" references="ad.users(id)"/>
+            </column>
+            <column name="group_id" type="integer">
+                <constraints nullable="false" foreignKeyName="users_groups_group_fkey" references="ad.group(id)"/>
+            </column>
+        </createTable>
+        <addPrimaryKey schemaName="ad" tableName="users_groups" columnNames="user_id, group_id"/>
+    </changeSet>
+
+</databaseChangeLog>

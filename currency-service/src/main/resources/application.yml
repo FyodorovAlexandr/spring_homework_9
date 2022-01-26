@@ -1,0 +1,24 @@
+currency:
+  token: 190f05120341a21372f00d777d8ff902
+  url:
+    convert: http://data.fixer.io/api/convert?access_key=%s&from=%s&to=%s&amount=%s
+    all-exchange: http://data.fixer.io/api/latest?access_key=%s
+server:
+  port: 8090
+
+auth:
+  audience: currency-service
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://dev-t8qcmmc1.us.auth0.com/
+  application:
+    name: currency-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9999/eureka
